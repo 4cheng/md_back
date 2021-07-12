@@ -1,21 +1,13 @@
+#include <iostream>
+#include <string>
+#include <string.h>
 
-# C++
-### C++ 封装类
-### 函数重载原理
-### 多态机制
-### 强制类型转换
-### 异常机制
-### 动态静态链接库
-### 智能指针
-### 写时拷贝 Copy On Write `COW`
-简而言之：“写的时候才去分配空间”。是一种延时拷贝。
-实现原理：通过“引用计数”实现。在分配空间时多分配 4 个字节，用来记录有多少个指针指向这块空间，当有新指针指向时 +1，释放空间时 -1，如果引用计数等于 0，才彻底释放这块空间。如果有指针要修改这块空间，则再为这个指针分配自己的空间（此时，旧计数 -1，新计数 +1）.
-使用 `COW` 实现 `String` 类:
-```C++
+using namespace std;
+
 class String
 {
 public:
-    String(const char str="") :_str(new char[strlen(str) + 1 + 4])
+    String(const char* str="") :_str(new char[strlen(str) + 1 + 4])
     {
         cout << "String ()" << endl;
         _str += 4;                      // 前 4 个字节来存放引用计数
@@ -83,9 +75,19 @@ private:
 
 private:
     char *_str;
+};
+
+
+int main()
+{
+    String s1 = "hello";
+    String s2 = s1;
+    cout << &s1 << endl;
+    cout << &s2<< endl;
+
+    s1[1] = 'q';
+    s2[1] = 'w';
+    cout << &s1 << endl;
+    cout << &s2 << endl;
+    return 0;
 }
-```
-
-
-
-### STL容器
